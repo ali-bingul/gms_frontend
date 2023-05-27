@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../common/axiosApi';
 import { httpConfig } from '../../helpers/httpConfig';
-import { setToken } from '../../utils/AccessToken';
+import { removeToken, setToken } from '../../utils/AccessToken';
 
 export const loginUserAsync = createAsyncThunk('auth/loginUserAsync',
     async (paramData: any, { rejectWithValue }) => {
@@ -27,12 +27,20 @@ const initialState = {
 const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            // remove token
+            removeToken();
+            window.location.reload();
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(loginUserAsync.fulfilled, (state, { payload }) => {
             state.loginUserResponse = payload;
         });
     }
 });
+
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

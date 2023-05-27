@@ -21,6 +21,7 @@ const LoginComponent = () => {
             if(response.meta.requestStatus === "fulfilled" && response.payload.success) {
                 alert("Giriş başarılı!");
                 navigate(`/`);
+                window.location.reload();
             } else {
                 alert("Bir hata oluştu!");
             }

@@ -1,5 +1,5 @@
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,18 +10,23 @@ import { getCurrentTerm } from "../../helpers/getCurrentTerm";
 import { getCurrentYear } from "../../helpers/getCurrentYear";
 import Select from 'react-select';
 import { getTermOptions } from "../../helpers/getTermOptions";
+import { getToken } from "../../utils/AccessToken";
+import { parseJwt } from "../../utils/ParseJWT";
 
 const ProjectsDataComponent = () => {
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
     const navigate = useNavigate();
 
-    const { register, control, setValue, handleSubmit, formState: { errors } } = useForm();
+    const { control, setValue } = useForm();
 
     const [term, setTerm] = useState(getCurrentTerm());
     const [year, setYear] = useState(getCurrentYear());
     const [where, setWhere] = useState("");
     const [limit] = useState(50);
     const [offset, setOffset] = useState(0);
+
+    const token = getToken();
+    const userPayload = parseJwt(token);
 
     const { loadingProjectsData, projectsData } = useSelector((state: any) => state.project);
 
@@ -59,11 +64,13 @@ const ProjectsDataComponent = () => {
             <Stack direction="horizontal" gap={2}>
                 <div className='mx-2 my-3'>
                     <h4>Projeler</h4>
-                    <div>
-                        <Link to="/projeler/yeni-kayit">
-                            <Button className='btn-success'>Yeni Proje Kaydı</Button>
-                        </Link>
-                    </div>
+                    {userPayload && (
+                        <div>
+                            <Link to="/projeler/yeni-kayit">
+                                <Button className='btn-success'>Yeni Proje Kaydı</Button>
+                            </Link>
+                        </div>
+                    )}
                 </div>
                 <div className='ms-auto'>
                     <p>Ara: </p>
@@ -123,6 +130,7 @@ const ProjectsDataComponent = () => {
                                                 placeholder="Yıl"
                                                 onChange={(e) => {
                                                     setValue("year", e);
+                                                    setYear(e.value);
                                                     dispatch(fetchAsyncProjectsData({
                                                         where: where,
                                                         limit: limit,
@@ -149,6 +157,7 @@ const ProjectsDataComponent = () => {
                                                 placeholder="Dönem"
                                                 onChange={(e) => {
                                                     setValue("term", e);
+                                                    setTerm(e.value);
                                                     dispatch(fetchAsyncProjectsData({
                                                         where: where,
                                                         limit: limit,
