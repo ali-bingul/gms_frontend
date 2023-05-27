@@ -1,5 +1,5 @@
 import { Navbar, Nav, Container, Stack } from 'react-bootstrap';
-import MuhendislikLogo from '../assets/muhendislik.svg';
+import MuhendislikLogo from '../../assets/muhendislik.svg';
 
 const NavbarComponent = () => {
     return (
@@ -12,15 +12,14 @@ const NavbarComponent = () => {
                                 alt="#"
                                 src={MuhendislikLogo}
                                 width="70"
-                                // className='d-inline-block align-top'
                                 className='p-2'
                             />{'EEM'}
                         </Navbar.Brand>
                     </div>
                     <div>
                         <Nav className='me-auto'>
-                            <Nav.Link href='/projeler'>Projeler</Nav.Link>
-                            <Nav.Link href='/kullanicilar'>Kullanıcılar</Nav.Link>
+                            <Nav.Link href='/'>Projeler</Nav.Link>
+                            <Nav.Link href='/#/kullanicilar'>Kullanıcılar</Nav.Link>
                         </Nav>
                     </div>
                 </Stack>

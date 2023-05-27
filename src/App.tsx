@@ -1,20 +1,22 @@
-import { useState } from 'react';
 import './App.css';
-import NavbarComponent from './components/NavbarComponent';
-import { Routes, Route, HashRouter, BrowserRouter } from 'react-router-dom';
+import NavbarComponent from './components/common/NavbarComponent';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import LoginComponent from './components/auth/LoginComponent';
+import ProjectsDataComponent from './components/project/ProjectsDataComponent';
+import CreateProjectDataComponent from './components/project/CreateProjectDataComponent';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className='app'>
       <NavbarComponent />
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
+          <Route path='/' element={<ProjectsDataComponent />} />
+          <Route path='/projeler/yeni-kayit' element={<CreateProjectDataComponent />} />
           <Route path='/admin/login' element={<LoginComponent />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   )
 }

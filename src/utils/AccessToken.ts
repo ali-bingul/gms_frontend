@@ -7,7 +7,11 @@ export const setToken = (value: String) => {
 }
 
 export const getToken = () => {
-    return secureLocalStorage.getItem(TOKEN_KEY);
+    const token = secureLocalStorage.getItem(TOKEN_KEY);
+    if (token !== null) {
+        return token.toString();
+    }
+    return "";
 }
 
 export const removeToken = () => {
