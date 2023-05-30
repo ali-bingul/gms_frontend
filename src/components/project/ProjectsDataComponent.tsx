@@ -63,7 +63,7 @@ const ProjectsDataComponent = () => {
         <>
             <Stack direction="horizontal" gap={2}>
                 <div className='mx-2 my-3'>
-                    <h4>Projeler</h4>
+                    <h4>Mühendislik Tasarımı 2 | Projeler</h4>
                     {userPayload && (
                         <div>
                             <Link to="/projeler/yeni-kayit">

@@ -28,7 +28,9 @@ const NavbarComponent = () => {
                     </div>
                     <div>
                         <Nav className='me-auto'>
-                            <Nav.Link href='/#/kullanicilar'>Kullanıcılar</Nav.Link>
+                            {userPayload && (
+                                <Nav.Link href='/#/kullanicilar'>Kullanıcılar</Nav.Link>
+                            )}
                         </Nav>
                     </div>
                 </Stack>
