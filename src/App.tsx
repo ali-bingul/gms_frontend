@@ -7,6 +7,7 @@ import CreateProjectDataComponent from './components/project/CreateProjectDataCo
 import HomeComponent from './components/common/HomeComponent';
 import CreateLessonDataComponent from './components/lesson/CreateLessonDataComponent';
 import ProjectDataDetailComponent from './components/project/ProjectDataDetailComponent';
+import UsersDataComponent from './components/user/UsersDataComponent';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='/projeler/yeni-kayit' element={<CreateProjectDataComponent />} />
           <Route path='/admin/login' element={<LoginComponent />} />
           <Route path='/admin/dersler/yeni-kayit' element={<CreateLessonDataComponent />} />
+          <Route path='/kullanicilar' element={<UsersDataComponent />} />
         </Routes>
       </HashRouter>
     </div>
