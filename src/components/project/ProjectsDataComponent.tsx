@@ -2,7 +2,7 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 import { Breadcrumb, Button, Form, InputGroup, Spinner, Stack, Table } from "react-bootstrap";
 import { fetchAsyncProjectsData } from "../../features/reducers/projectSlice";
@@ -14,6 +14,8 @@ import { getToken } from "../../utils/AccessToken";
 import { parseJwt } from "../../utils/ParseJWT";
 
 const ProjectsDataComponent = () => {
+    const { lessonId, lessonName } = useParams();
+
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
     const navigate = useNavigate();
 
@@ -37,7 +39,8 @@ const ProjectsDataComponent = () => {
             limit: limit,
             offset: (limit * data.selected),
             year: year,
-            term: term
+            term: term,
+            lessonId: lessonId
         }));
     }
 
@@ -47,7 +50,8 @@ const ProjectsDataComponent = () => {
             limit: limit,
             offset: offset,
             year: year,
-            term: term
+            term: term,
+            lessonId: lessonId
         }));
     }, []);
 
@@ -56,14 +60,14 @@ const ProjectsDataComponent = () => {
     }
 
     const handleRowClick = (projectId: number) => {
-        navigate(`/projeler/${projectId}`, { replace: false });
+        navigate(`/proje-detay/${projectId}`, { replace: false });
     }
 
     return (
         <>
             <Stack direction="horizontal" gap={2}>
                 <div className='mx-2 my-3'>
-                    <h4>Mühendislik Tasarımı 2 | Projeler</h4>
+                    <h4>{lessonName} | Projeler</h4>
                     {userPayload && (
                         <div>
                             <Link to="/projeler/yeni-kayit">
@@ -91,7 +95,8 @@ const ProjectsDataComponent = () => {
                                     limit: limit,
                                     offset: offset,
                                     year: year,
-                                    term: term
+                                    term: term,
+                                    lessonId: lessonId
                                 }));
                             }}>Ara</Button>
                         </InputGroup>
@@ -136,7 +141,8 @@ const ProjectsDataComponent = () => {
                                                         limit: limit,
                                                         offset: offset,
                                                         year: e.value,
-                                                        term: term
+                                                        term: term,
+                                                        lessonId: lessonId
                                                     }));
                                                 }}
                                             />}
@@ -163,7 +169,8 @@ const ProjectsDataComponent = () => {
                                                         limit: limit,
                                                         offset: offset,
                                                         year: year,
-                                                        term: e.value
+                                                        term: e.value,
+                                                        lessonId: lessonId
                                                     }));
                                                 }}
                                             />}
@@ -188,7 +195,7 @@ const ProjectsDataComponent = () => {
                                     <th>Proje Adı</th>
                                     <th>Yıl</th>
                                     <th>Dönem</th>
-                                    <th>Öğretim Üyesi</th>
+                                    <th>Öğretim Elemanı</th>
                                     <th>Takım Üyeleri</th>
                                 </tr>
                             </thead>

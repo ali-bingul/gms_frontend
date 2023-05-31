@@ -5,9 +5,17 @@ import { getToken } from '../../utils/AccessToken';
 
 export const fetchAsyncProjectsData = createAsyncThunk("project/fetchAsyncProjectsData",
     async (paramData: any) => {
-        const { where, limit, offset, year, term } = paramData;
+        const { where, limit, offset, year, term, lessonId } = paramData;
         const response = await axiosApi
-            .get(`/project?where=${where}&limit=${limit}&offset=${offset}&year=${year}&term=${term}`, httpConfig("<tokendata>"));
+            .get(`/project?where=${where}&limit=${limit}&offset=${offset}&year=${year}&term=${term}&lessonId=${lessonId}`, httpConfig("<tokendata>"));
+        return response.data;
+    });
+
+export const fetchAsyncSingleProjectData = createAsyncThunk("project/fetchAsyncSingleProjectData",
+    async (paramData: any) => {
+        const { projectId } = paramData;
+        const response = await axiosApi
+            .get(`/project/${projectId}`, httpConfig(getToken()));
         return response.data;
     });
 
@@ -24,6 +32,8 @@ const initialState = {
     projectsData: [],
     loadingProjectsData: true,
     createProjectDataResponse: {},
+    singleProjectData: {},
+    loadingSingleProjectData: true
 };
 
 const projectSlice = createSlice({
@@ -43,6 +53,16 @@ const projectSlice = createSlice({
         });
         builder.addCase(createProjectData.fulfilled, (state, { payload }) => {
             state.createProjectDataResponse = payload;
+        });
+        builder.addCase(fetchAsyncSingleProjectData.pending, (state) => {
+            state.loadingSingleProjectData = true;
+        });
+        builder.addCase(fetchAsyncSingleProjectData.fulfilled, (state, { payload }) => {
+            state.loadingSingleProjectData = false;
+            state.singleProjectData = payload;
+        });
+        builder.addCase(fetchAsyncSingleProjectData.rejected, (state) => {
+            state.loadingSingleProjectData = false;
         });
     },
 });

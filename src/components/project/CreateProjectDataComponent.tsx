@@ -1,7 +1,7 @@
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { Breadcrumb, Button, Form } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../utils/AccessToken";
 import { parseJwt } from "../../utils/ParseJWT";
@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { createProjectData } from "../../features/reducers/projectSlice";
 import { getCurrentYear } from "../../helpers/getCurrentYear";
 import { getCurrentTerm } from "../../helpers/getCurrentTerm";
+import { fetchAsyncLessonDatas } from "../../features/reducers/lessonSlice";
+import Select from 'react-select';
 
 const CreateProjectDataComponent = () => {
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
@@ -19,16 +21,35 @@ const CreateProjectDataComponent = () => {
     const [documentSizeExceed, setDocumentSizeExceed] = useState(false);
     const [fileTypeError, setFileTypeError] = useState(false);
 
+    const { lessonDatas, loadingLessonDatas } = useSelector((state: any) => state.lesson);
+
     const token = getToken();
     const userPayload = parseJwt(token);
 
+    const lessonOptions = !loadingLessonDatas && lessonDatas.data.map((lesson: any) => {
+        return {
+            label: lesson.lesson_name,
+            value: lesson.id
+        }
+    });
+
     const submitForm = (data: any) => {
+        if (videoSizeExceed || documentSizeExceed) {
+            alert("Lütfen dosya boyutlarını kontrol ediniz!");
+            return;
+        }
+        if (fileTypeError) {
+            alert("Lütfen yüklediğiniz dosya tiplerini kontrol ediniz!");
+            return;
+        }
+        data.lesson_id = data.lesson_id.value;
         const formData = new FormData();
         formData.append("project_name", data.project_name);
         formData.append("team_members", data.team_members);
         formData.append("year", getCurrentYear().toString());
         formData.append("term", getCurrentTerm());
         formData.append("user_id", userPayload.id);
+        formData.append("lesson_id", data.lesson_id);
         formData.append("final_paper_filename", data.final_paper_filename[0]);
         formData.append("presentation_filename", data.presentation_filename[0]);
         formData.append("video_filename", data.video_filename[0]);
@@ -43,8 +64,11 @@ const CreateProjectDataComponent = () => {
     }
 
     useEffect(() => {
-        const token = getToken();
-        if (token === "" || token === null) {
+        dispatch(fetchAsyncLessonDatas());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (!userPayload) {
             navigate(`/`);
         }
     }, []);
@@ -68,6 +92,33 @@ const CreateProjectDataComponent = () => {
                 <Form onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
                     <div className="row">
                         <div className="col">
+                            <Form.Group className='mb-2'>
+                                <div className='row d-flex align-items-center'>
+                                    <div className='col-4 p-0 ps-2'>
+                                        <Form.Label><strong>Ders*:</strong></Form.Label>
+                                    </div>
+                                    <div className='col-8 p-0'>
+                                        <Controller
+                                            name='lesson_id'
+                                            control={control}
+                                            rules={{ required: true }}
+                                            render={({ field }) => <Select
+                                                {...field}
+                                                options={lessonOptions}
+                                                placeholder="Ders"
+                                                onChange={(e) => {
+                                                    setValue("lesson_id", e);
+                                                }}
+                                            />}
+                                        />
+                                        {errors.lesson_id && (
+                                            <Form.Text className="text-muted">
+                                                <span className='text-danger'>Bu alanın girilmesi zorunludur!</span>
+                                            </Form.Text>
+                                        )}
+                                    </div>
+                                </div>
+                            </Form.Group>
                             <Form.Group className='mb-2'>
                                 <div className='row d-flex align-items-center'>
                                     <div className='col-4 p-0 ps-2'>
