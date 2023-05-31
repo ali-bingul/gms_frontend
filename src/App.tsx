@@ -8,6 +8,7 @@ import HomeComponent from './components/common/HomeComponent';
 import CreateLessonDataComponent from './components/lesson/CreateLessonDataComponent';
 import ProjectDataDetailComponent from './components/project/ProjectDataDetailComponent';
 import UsersDataComponent from './components/user/UsersDataComponent';
+import UserDataDetailComponent from './components/user/UserDataDetailComponent';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/admin/login' element={<LoginComponent />} />
           <Route path='/admin/dersler/yeni-kayit' element={<CreateLessonDataComponent />} />
           <Route path='/kullanicilar' element={<UsersDataComponent />} />
+          <Route path='/kullanicilar/:userId' element={<UserDataDetailComponent />} />
         </Routes>
       </HashRouter>
     </div>

@@ -10,9 +10,19 @@ export const getUsersDataWithProjectCount = createAsyncThunk('user/getUsersDataW
         return response.data;
     });
 
+export const fetchAsyncSingleUserData = createAsyncThunk("user/fetchAsyncSingleUserData",
+    async (paramData: any) => {
+        const { userId } = paramData;
+        const response = await axiosApi
+            .get(`/user/${userId}`, httpConfig(getToken()));
+        return response.data;
+    });
+
 const initialState = {
     usersDataWithProjectCount: [],
-    loadingUsersDataWithProjectCount: true
+    loadingUsersDataWithProjectCount: true,
+    singleUserData: {},
+    loadingSingleUserData: true
 };
 
 const userSlice = createSlice({
@@ -29,6 +39,16 @@ const userSlice = createSlice({
         });
         builder.addCase(getUsersDataWithProjectCount.rejected, (state) => {
             state.loadingUsersDataWithProjectCount = false;
+        });
+        builder.addCase(fetchAsyncSingleUserData.pending, (state) => {
+            state.loadingSingleUserData = true;
+        });
+        builder.addCase(fetchAsyncSingleUserData.fulfilled, (state, { payload }) => {
+            state.loadingSingleUserData = false;
+            state.singleUserData = payload;
+        });
+        builder.addCase(fetchAsyncSingleUserData.rejected, (state) => {
+            state.loadingSingleUserData = false;
         });
     }
 });

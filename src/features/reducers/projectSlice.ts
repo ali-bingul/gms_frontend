@@ -11,6 +11,14 @@ export const fetchAsyncProjectsData = createAsyncThunk("project/fetchAsyncProjec
         return response.data;
     });
 
+export const fetchAsyncProjectsDataWithUserId = createAsyncThunk("project/fetchAsyncProjectsDataWithUserId",
+    async (paramData: any) => {
+        const { term, year, userId } = paramData;
+        const response = await axiosApi
+            .get(`/project/getProjectsWithUserId/${userId}?year=${year}&term=${term}`, httpConfig(getToken()));
+        return response.data;
+    });
+
 export const fetchAsyncSingleProjectData = createAsyncThunk("project/fetchAsyncSingleProjectData",
     async (paramData: any) => {
         const { projectId } = paramData;
@@ -33,7 +41,9 @@ const initialState = {
     loadingProjectsData: true,
     createProjectDataResponse: {},
     singleProjectData: {},
-    loadingSingleProjectData: true
+    loadingSingleProjectData: true,
+    projectsDataWithUserId: [],
+    loadingProjectsDataWithUserId: true
 };
 
 const projectSlice = createSlice({
@@ -63,6 +73,16 @@ const projectSlice = createSlice({
         });
         builder.addCase(fetchAsyncSingleProjectData.rejected, (state) => {
             state.loadingSingleProjectData = false;
+        });
+        builder.addCase(fetchAsyncProjectsDataWithUserId.pending, (state) => {
+            state.loadingProjectsDataWithUserId = true;
+        });
+        builder.addCase(fetchAsyncProjectsDataWithUserId.fulfilled, (state, { payload }) => {
+            state.loadingProjectsDataWithUserId = false;
+            state.projectsDataWithUserId = payload;
+        });
+        builder.addCase(fetchAsyncProjectsDataWithUserId.rejected, (state) => {
+            state.loadingProjectsDataWithUserId = false;
         });
     },
 });
