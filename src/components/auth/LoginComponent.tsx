@@ -36,7 +36,7 @@ const LoginComponent = () => {
                         <img
                             src={MuhendislikLogo}
                             alt="Renault Group"
-                            height="50"
+                            height="120"
                             className='mb-4'
                         />
                     </Form.Group>

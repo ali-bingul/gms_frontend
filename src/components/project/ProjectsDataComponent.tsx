@@ -221,7 +221,7 @@ const ProjectsDataComponent = () => {
                 previousLabel={'önceki'}
                 nextLabel={'sonraki'}
                 breakLabel={'...'}
-                pageCount={2}
+                pageCount={1}
                 marginPagesDisplayed={4}
                 pageRangeDisplayed={6}
                 onPageChange={handlePageClick}

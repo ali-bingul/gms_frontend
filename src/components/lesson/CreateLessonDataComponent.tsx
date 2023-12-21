@@ -1,4 +1,4 @@
-import { Breadcrumb, Button, Form } from "react-bootstrap"
+import { Breadcrumb, Button, Container, Form } from "react-bootstrap"
 import { Controller, useForm } from "react-hook-form";
 import Select from 'react-select';
 import { getTermOptions } from "../../helpers/getTermOptions";
@@ -39,7 +39,8 @@ const CreateLessonDataComponent = () => {
                     </Breadcrumb>
                 </div>
             </div>
-            <div className="mx-2 w-50">
+            <div className="w-50 mx-4">
+                {/* <Container className="p-4 mt-4"> */}
                 <Form onSubmit={handleSubmit(submitForm)}>
                     <Form.Group className='mb-2'>
                         <div className='row d-flex align-items-center'>
@@ -115,6 +116,7 @@ const CreateLessonDataComponent = () => {
                     </Form.Group>
                 </Form>
             </div>
+            {/* </Container> */}
         </div>
     )
 }
